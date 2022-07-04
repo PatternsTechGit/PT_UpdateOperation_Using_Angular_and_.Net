@@ -4,7 +4,7 @@ using Services;
 using Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Reading the appsettings.json from current directory.
 var configuration = new ConfigurationBuilder()
                .SetBasePath(Directory.GetCurrentDirectory())
@@ -14,6 +14,17 @@ var configuration = new ConfigurationBuilder()
 // Fetching the value BBBankDBConnString from connectionstring section.
 var connectionString = configuration.GetConnectionString("BBBankDBConnString");
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                      });
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -22,7 +33,7 @@ builder.Services.AddControllers();
 ///...Dependency Injection settings
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<DbContext, BBBankContext>();
-
+builder.Services.AddScoped<IAccountsService, AccountService>();
 //Adding EF DBContext in the application services using the connectionString fetched above.
 //UseLazyLoadingProxies : Lazy loading means that the related data is transparently loaded from the database when the navigation property is accessed.
 builder.Services.AddDbContext<BBBankContext>(
@@ -32,7 +43,7 @@ b => b.UseSqlServer(connectionString)
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
 
 app.MapControllers();
