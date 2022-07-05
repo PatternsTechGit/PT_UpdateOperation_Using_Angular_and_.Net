@@ -11,10 +11,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CreateAccountComponent } from './create-account/create-account.component';
+import { ManageAccountComponent } from './manage-account/manage-account.component';
 @NgModule({
   declarations: [
     AppComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    CreateAccountComponent,
+    ManageAccountComponent
   ],
   imports: [
     BrowserModule,
