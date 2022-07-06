@@ -2,6 +2,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Contracts;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -38,8 +39,14 @@ builder.Services.AddScoped<IAccountsService, AccountService>();
 //UseLazyLoadingProxies : Lazy loading means that the related data is transparently loaded from the database when the navigation property is accessed.
 builder.Services.AddDbContext<BBBankContext>(
 b => b.UseSqlServer(connectionString)
-.UseLazyLoadingProxies(true)
+.UseLazyLoadingProxies(false)
 );
+
+//AddJsonOptions to remove object cycle error in Account-User
+builder.Services.AddControllers().AddJsonOptions(x =>
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

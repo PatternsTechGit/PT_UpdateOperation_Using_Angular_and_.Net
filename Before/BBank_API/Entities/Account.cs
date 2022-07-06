@@ -29,7 +29,7 @@ namespace Entities
         public virtual User User { get; set; }
 
         // One Account might have 0 or more Transactions (1:Many relationship)
-       // public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 
     // Two posible statuses of an account

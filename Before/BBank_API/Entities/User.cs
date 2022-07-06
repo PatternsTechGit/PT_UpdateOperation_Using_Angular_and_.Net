@@ -22,6 +22,6 @@ namespace Entities
         public string ProfilePicUrl { get; set; }
 
         // Account attached to the user 
-      //  public virtual Account Account { get; set; }
+        public virtual Account Account { get; set; }
     }
 }

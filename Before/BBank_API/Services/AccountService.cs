@@ -16,14 +16,28 @@ namespace Services
 
         public async Task<AccountsListResponse> GetAllAccountsPaginated(int pageIndex, int pageSize)
         {
+            ////// totalCount of data available on server.
+            ////var totalCount =  _bbBankContext.Accounts.Count();
+            ////var accounts =  _bbBankContext.Accounts
+            ////    // first n number of records will be skpped based on pageSize and pageIndex
+            ////    // for example for pageIndex 2 of pageSize is 10 first 10 records will be skipped.
+            ////    .Skip((pageIndex) * pageSize)
+            ////    .Take(pageSize)
+            ////    .ToList();
+            ////return new AccountsListResponse
+            ////{
+            ////    Accounts = accounts,
+            ////    ResultCount = totalCount
+            ////};
+
             // totalCount of data available on server.
-            var totalCount =  _bbBankContext.Accounts.Count();
-            var accounts =  _bbBankContext.Accounts
+            var totalCount = await _bbBankContext.Accounts.CountAsync();
+            var accounts = await _bbBankContext.Accounts.Include(x => x.User)
                 // first n number of records will be skpped based on pageSize and pageIndex
                 // for example for pageIndex 2 of pageSize is 10 first 10 records will be skipped.
                 .Skip((pageIndex) * pageSize)
                 .Take(pageSize)
-                .ToList();
+                .ToListAsync();
             return new AccountsListResponse
             {
                 Accounts = accounts,
