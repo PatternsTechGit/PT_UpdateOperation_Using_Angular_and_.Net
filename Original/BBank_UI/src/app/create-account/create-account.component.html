@@ -5,7 +5,7 @@
 <div class="card-body"> -->
 <!-- onSubmit function will be called when any button with type=submit is clicked within this form -->
 <!-- accountForm gives a unique name to the form. and ngForm attaches element validation to that form. -->
-<form class="example-container" (ngSubmit)="onSubmit()" #accountForm="ngForm" novalidate>
+<form class="example-container" (ngSubmit)="onSubmit(accountForm)" #accountForm="ngForm" novalidate>
     <div class="row">
       <div class="col-12">
         <div class="card card-user">
@@ -30,7 +30,7 @@
                     <!-- currently selected active directory user will be in selectedAdUser -->
                     <!-- on Select's selection change "onAdUserSelect" function will be called -->
                     <select class="form-control" name="user" id="user" [(ngModel)]="selectedAdUser"
-                      (change)="onAdUserSelect()">
+                      (change)="onAdUserSelect()" [disabled]="isEditMode">
                       <option [ngValue]="null" selected disabled>Select Azure AD User</option>
                       <!-- All AD Users fetched from the server are in array of type azureAdUser called azureAdUsers  -->
                       <!-- looping on that array to populate Select control and setting the individual value to adUser and picking up displayName from it for display -->
@@ -52,7 +52,7 @@
                         <label for="accountNumber">Account Number</label>
                         <input #accountNumber="ngModel" type="text" class="form-control" id="accountNumber"
                           placeholder="Account Number" [(ngModel)]="account.accountNumber" name="accountNumber"
-                          required />
+                          required  [disabled]="isEditMode" />
                       </div>
                       <div class="my-1">
                         <label for="openingBalance">Opening Balance</label>
@@ -62,7 +62,7 @@
                           </div>
                           <input type="number" class="form-control" id="currentBalance" placeholder="Current Balance"
                             [(ngModel)]="account.currentBalance" name="currentBalance"
-                            onKeyPress="if(this.value.length==10) return false;" />
+                            onKeyPress="if(this.value.length==10) return false;" [disabled]="isEditMode" />
                         </div>
                       </div>
                     </div>
@@ -147,7 +147,7 @@
                 <!-- like we can track validation of individual forms we can also track validation of entire form -->
                 <!-- Create buttons caus the form to trigger submit behavior but is disabled until entire form is in valid sate. -->
                 <button [disabled]="!accountForm.form.valid" class="btn btn-danger btn-create btn-block" type="submit">
-                  Create
+                  {{isEditMode ? "Submit" : "Create"}}
                 </button>
               </div>
             </div>

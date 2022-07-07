@@ -12,5 +12,7 @@ namespace Services.Contracts
     {
         Task<AccountsListResponse> GetAllAccountsPaginated(int pageIndex, int pageSize);
         Task OpenAccount(Account account);
+        Task UpdateAccount(Account account);
+        Task<Account> GetAccountByID(string id);
     }
 }

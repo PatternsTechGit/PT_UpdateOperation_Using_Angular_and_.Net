@@ -6,6 +6,7 @@ import { Component, ElementRef, ViewChild,OnInit } from '@angular/core';
  import AzureAdService from '../services/azuread.service';
 import { Account, User } from '../models/account';
 import { AzureAdUser } from '../models/azureAdUser';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-account',
@@ -22,8 +23,31 @@ export class CreateAccountComponent  {
   azureAdUsers: AzureAdUser[];
   // Selected user on drop down.
   selectedAdUser: AzureAdUser;
-  constructor(private azureAdService: AzureAdService, private accountsService: AccountsService) {
-    this.initializeEmptyForm();
+  isEditMode: boolean;
+  constructor(private azureAdService: AzureAdService, private accountsService: AccountsService,  public router: Router, private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.queryParamMap.subscribe((params: any) => {
+      if (params.params.accountId == null) {
+        // if parameter was not passed means this component is to be used to create new account.
+        this.isEditMode = false;
+        this.initializeEmptyForm();
+      }
+      else {
+        // if parameter is passed then populating the account object (that is two way binded to form controls) with the object passed in
+        this.isEditMode = true;
+        let accountId = params.params.accountId;
+        this.accountsService
+        // sending the two way binded and updated account object to the server.
+        .getAccountById(accountId)
+        .subscribe({
+          next: (data:any) => {
+           this.account = data
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+      }
+    })
   }
   onAdUserSelect() {
     // few of the  properties of account object will be populated from the properties of Azure AD User
@@ -43,21 +67,39 @@ export class CreateAccountComponent  {
           },
         }); */
   }
-  onSubmit() {
-    console.log(this.account);
-    this.accountsService
-    // sending the two way binded and populated account object to the server to get persisted.
-      .openAccount(this.account)
-      .subscribe({
-        next: (data) => {
-          // clearing up the form again after form data is sent to server.
-          this.initializeEmptyForm();
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+  
+  onSubmit(form:any) {
+    // calling update api if component is in edit mode
+    // otherwise calling create account api if the form is not in edit mode
+    if (this.isEditMode) {
+      this.accountsService
+        // sending the two way binded and updated account object to the server.
+        .updateAccount(this.account)
+        .subscribe({
+          next: (data) => {
+            // once update is performed navigating back to manage accounts page 
+            this.router.navigate(['manage-accounts'])
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+    } else {
+      this.accountsService
+        // sending the two way binded and populated account object to the server to get persisted.
+        .openAccount(this.account)
+        .subscribe({
+          next: (data) => {
+            // clearing up the form again after form data is sent to server.
+            this.initializeEmptyForm();
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+    }
   }
+
   initializeEmptyForm() {
     // fetching list of Azure AD Users from azureAdService
     this.azureAdService

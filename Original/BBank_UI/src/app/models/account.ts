@@ -23,3 +23,11 @@ export class User {
 export interface AccountResponse extends ApiResponse {
   result: AccountListsResponse
 }
+
+export interface GetAccountResponse extends ApiResponse {
+  account: Account
+}
+
+export class GetAccountResponse {
+  account: Account;
+}

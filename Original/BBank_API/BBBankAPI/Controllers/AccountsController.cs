@@ -20,7 +20,7 @@ namespace BBBankAPI.Controllers
         {
             try
             {
-                var result = (await _accountsService.GetAllAccountsPaginated(pageIndex, pageSize));
+                
                 return new OkObjectResult(await _accountsService.GetAllAccountsPaginated(pageIndex, pageSize));
             }
             catch (Exception ex)
@@ -37,6 +37,37 @@ namespace BBBankAPI.Controllers
             {
                 await _accountsService.OpenAccount(account);
                 return new OkObjectResult("New Account Created.");
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex);
+            }
+        }
+
+        [HttpPut]
+        [Route("UpdateAccount")]
+        public async Task<ActionResult> UpdateAccount(Account account)
+        {
+            try
+            {
+                await _accountsService.UpdateAccount(account);
+                return new OkObjectResult("New Account Created.");
+
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex);
+            }
+        }
+        [HttpGet]
+        [Route("GetAccountById/{accountId}")]
+        public async Task<ActionResult> GetAccountById(string accountId)
+        {
+            try
+            {
+                var account = await _accountsService.GetAccountByID(accountId);
+                return new OkObjectResult(account);
+
             }
             catch (Exception ex)
             {

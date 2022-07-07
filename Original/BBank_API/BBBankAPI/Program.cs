@@ -1,4 +1,5 @@
 using Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Contracts;
@@ -45,7 +46,11 @@ b => b.UseSqlServer(connectionString)
 //AddJsonOptions to remove object cycle error in Account-User
 builder.Services.AddControllers().AddJsonOptions(x =>
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
+// Disabling default model validation because we have to use custom validation
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 var app = builder.Build();
 

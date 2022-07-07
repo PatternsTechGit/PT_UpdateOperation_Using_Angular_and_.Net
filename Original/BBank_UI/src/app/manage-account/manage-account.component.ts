@@ -102,7 +102,7 @@ export class ManageAccountComponent implements OnInit {
 
   manage(account:any){
     
-    this.router.navigate(['create-account']);
+    this.router.navigate(['create-account'], { queryParams: { accountId: account.id } })
   }
 
 }

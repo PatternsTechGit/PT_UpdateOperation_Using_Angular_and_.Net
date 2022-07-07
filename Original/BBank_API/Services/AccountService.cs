@@ -66,5 +66,17 @@ namespace Services
             // Once everything in place we make the Database call.
             await this._bbBankContext.SaveChangesAsync();
         }
+
+        public async Task UpdateAccount(Account account)
+        {
+            this._bbBankContext.Users.Update(account.User);
+            this._bbBankContext.Accounts.Update(account);
+            await this._bbBankContext.SaveChangesAsync();
+        }
+
+        public async Task<Account> GetAccountByID(string id)
+        {
+            return await _bbBankContext.Accounts.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }
