@@ -19,7 +19,7 @@ namespace Entities
         //Available Balance of the account
         public decimal CurrentBalance { get; set; }
 
-        // This decoration is required to conver integer coming in from UI to respective Enum
+        // This decoration is required to convert integer coming in from UI to respective Enum
         [JsonConverter(typeof(JsonStringEnumConverter))]
         //Account's status
         public AccountStatus AccountStatus { get; set; }
