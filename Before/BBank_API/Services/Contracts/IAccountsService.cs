@@ -11,5 +11,6 @@ namespace Services.Contracts
     public interface IAccountsService
     {
         Task<AccountsListResponse> GetAllAccountsPaginated(int pageIndex, int pageSize);
+        Task OpenAccount(Account account);
     }
 }

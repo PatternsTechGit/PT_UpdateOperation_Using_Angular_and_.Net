@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Entities
@@ -12,13 +13,15 @@ namespace Entities
         // String that uniquely identifies the account
         public string AccountNumber { get; set; }
 
-        //Title of the account
+        //Title of teh account
         public string AccountTitle { get; set; }
 
         //Available Balance of the account
         public decimal CurrentBalance { get; set; }
 
-        //Account's status 
+        // This decoration is required to conver integer coming in from UI to respective Enum
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        //Account's status
         public AccountStatus AccountStatus { get; set; }
 
         //Setting forignkey to resolve circular dependency
