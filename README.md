@@ -28,6 +28,8 @@ Previously, we scaffolded a new Angular application in which we have
 
 ![DataGrid Updated video](https://user-images.githubusercontent.com/100709775/176945677-467a14c3-28ca-42f4-8a17-8f0d6ab1ebc5.gif)
 
+For previous implementation check [Data Grid Lab](https://github.com/PatternsTechGit/PT_DataGrid)
+
 ## In this exercise
 
  * We will implement method e.g. **GetAccountById** to retrieve account by Id.
